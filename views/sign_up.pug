@@ -1,0 +1,26 @@
+extends layout 
+
+block content 
+    h1 Sign Up Form
+
+    form(method='POST')
+      div
+        label(for='first_name') First Name:
+        input#first_name.form-control(type='text', placeholder='First name (Christian)' name='first_name' required value=(undefined===author ? '' : author.first_name) )
+        label(for='last_name') Last Name:
+        input#last_name.form-control(type='text', placeholder='Last name (Surname)' name='last_name' required value=(undefined===author ? '' : author.family_name))
+    
+      div
+        label(for='username') Username:
+        input#username.form-control(type='text', placeholder='Username (crhistianSurname@example.com)' name='username' required value=(undefined===author ? '' : author.first_name) )
+        label(for='password') Password:
+        input#password.form-control(type='text', placeholder='Password' name='password' required value=(undefined===author ? '' : author.family_name))
+        label(for='password_repeat') Confirm Password:
+        input#password_repeat.form-control(type='text', placeholder='Password' name='password_repeat' required value=(undefined===author ? '' : author.family_name))
+
+      button.btn.btn-primary(type='submit') Submit
+
+    if errors
+      ul
+        for error in errors
+          li!= error.msg
