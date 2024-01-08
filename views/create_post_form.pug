@@ -1,0 +1,19 @@
+extends layout 
+
+block content 
+    if user
+        form(method='POST')
+            div
+                label(for='title') Title:
+                input#title.form-control(type='text', placeholder='Today i cry' name='title' required )
+
+                label(for='text') Text:
+                input#text.form-control(type='text', placeholder='some day i dont ..' name='text' required )
+
+            button.btn.btn-primary(type='submit') Create Post
+        if errors
+            ul
+            for error in errors
+                li!= error.msg
+    else 
+        p Become A Memmer To Create A Post

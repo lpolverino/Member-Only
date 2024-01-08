@@ -2,22 +2,30 @@ extends layout
 
 block content 
 
-    if user.membership_status == "Unregistered"
+    h1 HomePage
 
-        
-        h1 Membership
+    if user
+        div.content
+            
+            div.sideboar
+                if user.membership_status == "Unregistered"
+                    a(href='/membership') Become A member
+                if user.membership_status !== "Admin"
+                    a(href='/admin') Become Admin
+            
+            div.messages
+                if user.membership_status != "Unregistered"
+                    a(href='/post/create')  Create Post
 
-        form(method='POST')
-            div
-                label(for='member_code') Enter Secret Member Code:
-                input#member_code.form-control(type='text', placeholder='the code' name='member_code' required )
-        
-            button.btn.btn-primary(type='submit') Submit
+                each post in posts   
+                    div.post
+                        h2= post.title
+                        p= post.text
+                        if user.membership_status != "Unregistered"
+                            p= "Author" + post.author.username
+                            p= post.timestamp
 
-        if errors
-            ul
-                for error in errors
-                    li!= error.msg
 
     else
-        h1 HomePage
+        div 
+            a(href="/sign-up") Become A User

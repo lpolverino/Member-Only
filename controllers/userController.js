@@ -1,5 +1,6 @@
 
 const User = require("../model/user")
+const Post = require("../model/post")
 const bcrypt = require("bcryptjs")
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
@@ -69,28 +70,22 @@ exports.sign_up_post = [
                     } else {
                       await user.save();
                       // New genre saved. Redirect to genre detail page.
-                      res.redirect("/membership")
+                      res.redirect("/home", {user:user})
                     }
                 } 
             })
         }
 })]
-exports.membership_get = (req, res, next) => {
-    console.log(req.user);
-    res.render("member_form")
-}
-
-exports.membership_post =[]
 
 exports.log_in_get = (req,res,next) =>{
     res.render("log_in")
 }
 
-exports.home_get = (req,res,next) =>{
-    res.render("home", {user:req.user})
+exports.member_get = (req,res,next) =>{
+    res.render("member_form", {user:req.user})
 }
 
-exports.home_post = [
+exports.member_post = [
     body("member_code","invalid Code")
     .trim()
     .isLength({ min: 1 , max:100})
@@ -112,7 +107,7 @@ exports.home_post = [
             }else{
 
                 console.log("failed");
-                res.render("home", {
+                res.render("member_form", {
                     user: req.user,
                     errors: [{msg:"Invalid Code"}],
                 });
@@ -120,3 +115,8 @@ exports.home_post = [
         }
     })
 ]
+
+exports.home_get = asyncHandler( async (req,res,next) =>{
+    const posts = await Post.find().populate("author").exec()
+    res.render("home", {user:req.user, posts:posts})
+})

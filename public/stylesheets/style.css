@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+.content{
+  display:  grid;
+  grid-template-columns: 200px 1fr;
+}
+
+.sidebar{
+  grid-column: 1/2;
+}
