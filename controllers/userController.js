@@ -69,9 +69,54 @@ exports.sign_up_post = [
                     } else {
                       await user.save();
                       // New genre saved. Redirect to genre detail page.
-                      res.redirect(user.url);
+                      res.redirect("/membership")
                     }
                 } 
             })
         }
 })]
+exports.membership_get = (req, res, next) => {
+    console.log(req.user);
+    res.render("member_form")
+}
+
+exports.membership_post =[]
+
+exports.log_in_get = (req,res,next) =>{
+    res.render("log_in")
+}
+
+exports.home_get = (req,res,next) =>{
+    res.render("home", {user:req.user})
+}
+
+exports.home_post = [
+    body("member_code","invalid Code")
+    .trim()
+    .isLength({ min: 1 , max:100})
+    .escape(),
+    asyncHandler(async(req,res,next) =>{
+        const errors = validationResult(req);
+        if(!errors.isEmpty()){
+            res.render("home", {
+                user: req.user,
+                errors: errors.array(),
+            });
+        }else{
+            const match = req.body.member_code === "Yes"
+            if(match){
+                // update member status
+                console.log("entering");
+                await User.findByIdAndUpdate(req.user._id, {membership_status: "Registered"});
+                res.redirect("/home")
+            }else{
+
+                console.log("failed");
+                res.render("home", {
+                    user: req.user,
+                    errors: [{msg:"Invalid Code"}],
+                });
+            }
+        }
+    })
+]

@@ -1,0 +1,16 @@
+extends layout 
+
+block content 
+    h1 Membership
+
+    form(method='POST')
+      div
+        label(for='member_code') Enter Secret Member Code:
+        input#member_code.form-control(type='text', placeholder='the code' name='member_code' required )
+ 
+      button.btn.btn-primary(type='submit') Submit
+
+    if errors
+      ul
+        for error in errors
+          li!= error.msg
